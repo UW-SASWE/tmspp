@@ -1,0 +1,32 @@
+{% set name = "tmsswot" %}
+{% set version = "0.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: ../../src/
+
+build:
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+
+requirements:
+  host:
+    - python >=3.6
+    - setuptools >=61.0
+    - pip
+  run:
+    - python >=3.6
+
+about:
+  home: https://github.com/UW-SASWE/tms-swot
+  summary: Multi satellite reservoir and lake monitoring tool
+  license: MIT License
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - pritamd47
