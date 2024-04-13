@@ -1,0 +1,14 @@
+dependencies:
+ - python
+ - numpy
+ - pandas
+ - geopandas
+ - jupyterlab
+ - hvplot
+ - jupyter_bokeh
+ - matplotlib
+ - geoviews
+ - cartopy
+ - bokeh
+ - pytest
+ - conda-build
