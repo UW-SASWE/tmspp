@@ -33,3 +33,12 @@ dependencies:
   - nb_conda_kernels
   - black
   - flake8
+  - hydroerr
+  - earthaccess
+  - earthengine-api
+  - nodejs
+  # pekel dataset
+  - pip:
+    - dask-labextension
+    - podaac-data-subscriber
+    - download_water_data
