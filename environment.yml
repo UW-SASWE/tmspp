@@ -37,6 +37,8 @@ dependencies:
   - earthaccess
   - earthengine-api
   - nodejs
+  - pytest
+  - conda-build
   # pekel dataset
   - pip:
     - dask-labextension
