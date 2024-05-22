@@ -42,11 +42,15 @@ jobs:
       - name: Setup environment with conda
         uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: test_environment.yml
+          environment-file: environment.yml
           environment-name: testenv
           init-shell: bash
           create-args: >-
             python=${{ matrix.python-version }}
+      - name: Install test packages
+        shell: bash -l {0}
+        run: |
+          mamba update --file test_environment.yml
       - name: Test conda
         shell: bash -l {0}
         run: |
