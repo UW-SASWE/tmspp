@@ -59,6 +59,7 @@ jobs:
         run: |
           mkdir conda_dist
           conda-build .github/workflows/ --output-folder conda_dist
+          conda config --set channel_priority 'strict'
       - name: Install tmsswot
         shell: bash -l {0}
         run: |
