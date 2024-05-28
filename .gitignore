@@ -5,6 +5,8 @@ extra/
 results/
 .DS_Store
 .vscode/
+tms-dynamic-world/
+models/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
