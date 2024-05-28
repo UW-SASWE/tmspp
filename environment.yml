@@ -17,8 +17,6 @@ dependencies:
   - planetary-computer
   - pystac-client
   # temp
-  - awscli
-  - s3fs
   - fsspec
   - gdown
   - aiohttp
@@ -39,7 +37,11 @@ dependencies:
   - nodejs
   - pytest
   - conda-build
-  # pekel dataset
+  - coverage
+  - lxml
+  - geemap
+  - tensorflow
+  - altair
   - pip:
     - dask-labextension
     - podaac-data-subscriber
