@@ -4,26 +4,45 @@ dependencies:
   - numpy
   - pandas
   - geopandas
+  - jupyterlab
+  - hvplot
+  - jupyter_bokeh
+  - matplotlib
+  - geoviews
+  - cartopy
+  - bokeh
   - dask
   - odc-stac
+  - jupyterlab
   - planetary-computer
   - pystac-client
+  # temp
   - fsspec
   - gdown
   - aiohttp
   - scipy
   - xarray
-  - netcdf4
   - rioxarray
+  - opencv
+  - folium
   - distributed
+  - zarr
   - tqdm
+  - nb_conda_kernels
+  - black
+  - flake8
   - hydroerr
-  - earthengine-api
   - earthaccess
+  - earthengine-api
+  - nodejs
   - pytest
   - conda-build
   - coverage
   - lxml
+  - geemap
   - tensorflow
+  - altair
   - pip:
+    - dask-labextension
     - podaac-data-subscriber
+    - download_water_data
