@@ -64,7 +64,8 @@ jobs:
         shell: bash -l {0}
         run: |
           conda update conda
-          conda install tmsswot -c ./conda_dist/
+          echo ls conda_dist
+          pip install tmsswot ./conda_dist/tmsswot-0.0-py3-none-any.whl
       - name: Run tests
         shell: bash -l {0}
         run: |
