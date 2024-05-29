@@ -63,6 +63,7 @@ jobs:
       - name: Install tmsswot
         shell: bash -l {0}
         run: |
+          conda update conda
           conda install tmsswot -c ./conda_dist/ --override-channels
       - name: Run tests
         shell: bash -l {0}
