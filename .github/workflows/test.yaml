@@ -63,8 +63,8 @@ jobs:
       - name: Install tmsswot
         shell: bash -l {0}
         run: |
-          conda update conda
-          echo ls conda_dist
+          echo ls conda_dist/
+          echo ls dist/
           conda install ./conda_dist/noarch/tmsswot-0.0-py_0.tar.bz2 --offline
       - name: Run tests
         shell: bash -l {0}
