@@ -5,6 +5,16 @@ import xarray as xr
 from dask.distributed import LocalCluster, Client
 
 def test_hls_download_cluster():
+    """
+    Test function to download HLS reservoir data using a Dask cluster.
+
+    This function tests the download_hls_reservoir function by downloading HLS reservoir data
+    for a specific reservoir ID within a given date range. It uses a Dask cluster to parallelize
+    the download process.
+
+    Returns:
+        None
+    """
     data = Path('tests/data/')
     val_poly_fn = data / 'validation-locations/subset-validation-reservoirs-grand.geojson'
     print(val_poly_fn, val_poly_fn.exists())
@@ -30,6 +40,15 @@ def test_hls_download_cluster():
 
 
 def test_hls_download_no_cluster():
+    """
+    Test function to download HLS reservoir data without using a Dask cluster.
+
+    This function tests the download_hls_reservoir function by downloading HLS reservoir data
+    for a specific reservoir ID within a given date range. It does not use a Dask cluster.
+
+    Returns:
+        None
+    """
     data = Path('tests/data/')
     val_poly_fn = data / 'validation-locations/subset-validation-reservoirs-grand.geojson'
     print(val_poly_fn, val_poly_fn.exists())
