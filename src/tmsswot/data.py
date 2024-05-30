@@ -82,10 +82,11 @@ def download_swot_for_reservoir(roi, start_date, end_date, download_dir):
     end_date = pd.to_datetime(end_date)
     download_dir = Path(download_dir)
     bounds = ",".join([f"{x:.3f}" for x in roi.total_bounds])
+
     podaac_cmd = [
         'podaac-data-downloader',
         '-c', 'SWOT_L2_HR_Raster_100m_2.0',
-        '-d', download_dir, 
+        '-d', str(download_dir), 
         rf'-b="{bounds}"',
         '-gr="SWOT_L2_HR_Raster_100m_UTM*"',
         '--start-date', pd.to_datetime(start_date).strftime('%Y-%m-%dT%XZ'),
@@ -100,10 +101,11 @@ def get_swot_id(
         val_res_poly,
         start_date="2022-07-01", 
         end_date="2022-07-31", 
-        buffer=2000, #m
+        buffer=2000, # m
         qual_mask_threshold=0.7,
         swot_dir = Path(f'../data/swot/raw'),
-        gd_track_fn = Path('../data/swot_orbit/swot_orbit.geojson')
+        gd_track_fn = Path('../data/swot_orbit/swot_orbit.geojson'),
+        download = False
     ):
     roi = val_res_poly.loc[val_res_poly['tmsos_id']==id]
     buffered_roi = roi.to_crs(roi.estimate_utm_crs()).geometry.iloc[0].convex_hull.buffer(buffer)
@@ -112,7 +114,8 @@ def get_swot_id(
     roi = roi.to_crs('epsg:4326')
 
     # download
-    download_swot_for_reservoir(roi, start_date, end_date, swot_dir)
+    if download:
+        download_swot_for_reservoir(roi, start_date, end_date, swot_dir)
 
     # determine swot pass number
     gd_track = gpd.read_file(gd_track_fn)
@@ -120,61 +123,63 @@ def get_swot_id(
     matches = gd_track[gd_track.intersects(roi.iloc[0].geometry)]
     pass_ids = list(matches.ID_PASS)
     
+    pass_id_l = []
     fns = []
     for pass_id in pass_ids:
         files = list(swot_dir.glob(f'*_{pass_id:03}_*'))
+        pass_id_l.extend([pass_id]*len(files))
         fns.extend(files)
 
     fn_dates = [fn.name.split('_')[13] for fn in fns]
 
     datas = []
 
-    for fn, fn_date in zip(fns, fn_dates):
+    pbar = tqdm(total=len(fns))
+    for fn, fn_date, pass_id in zip(fns, fn_dates, pass_id_l):
         fn_date = pd.to_datetime(fn_date)
+        pbar.set_description_str(f"Processing {fn_date}")
         if fn_date < pd.to_datetime(start_date) or fn_date > pd.to_datetime(end_date):
             continue
-        # data = xr.open_dataset(fn, engine='rasterio').sel(band=1)
         data = xr.open_dataset(fn, decode_coords="all")
         date = pd.to_datetime(fn.name.split('_')[13])
 
         data = data.assign_coords(
             reservoir=((id)),
-            time=((pd.to_datetime(date.date())))
+            time=((pd.to_datetime(date.date()))),
+            pass_id = ((pass_id))
         )
-        # print(data.spatial_ref.values)
-        utm_crs_list = query_utm_crs_info(
-            datum_name="WGS 84",
-            area_of_interest=AreaOfInterest(
-                west_lon_degree=data.attrs['geospatial_lon_min'],
-                south_lat_degree=data.attrs['geospatial_lat_max'],
-                east_lon_degree=data.attrs['geospatial_lon_max'],
-                north_lat_degree=data.attrs['geospatial_lat_max'],
-            ),
-        )
-        projection = utm_crs_list[0]
-        roi = roi.to_crs(projection.code)
-        data = data.rio.write_crs(projection.code)
+
+        projection = roi.estimate_utm_crs()
+        roi = roi.to_crs(projection)
+        data = data.rio.write_crs(projection)
         try:
             data = data[[
                 'water_area', 'water_area_qual', 
                 'water_frac', 'water_frac_uncert', 
                 'wse', 'wse_uncert', 'wse_qual'
-            ]].rio.clip(roi.geometry.values, crs=projection.code, drop=True)
+            ]].rio.clip(roi.geometry.values, crs=projection, drop=True)
             datas.append(data)
         except NoDataInBounds as e:
+            print(e)
             pass
+        finally:
+            pbar.update(1)
 
-    data = xr.concat(datas, dim='time')
-    
-    data = data.groupby('time').mean(dim='time')
+    try:
+        data = xr.concat(datas, dim='time')
+        
+        data = data.groupby('time').mean(dim='time')
 
-    data = data.chunk(chunks={
-        'time': 30,
-        'x': 4096,
-        'y': 4096
-    })
+        data = data.chunk(chunks={
+            'time': 30,
+            'x': 4096,
+            'y': 4096
+        })
 
-    return data
+        return data
+    except Exception as e:
+        print(e)
+        return None
 
 ## HLS
 def get_hls_id(
