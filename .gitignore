@@ -7,6 +7,7 @@ results/
 .vscode/
 tms-dynamic-world/
 models/
+notebooks/papermill/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
