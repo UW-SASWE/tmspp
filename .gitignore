@@ -8,6 +8,7 @@ results/
 tms-dynamic-world/
 models/
 notebooks/papermill/
+global_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
