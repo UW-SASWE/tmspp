@@ -4,6 +4,13 @@ dependencies:
   - numpy
   - pandas
   - geopandas
+  - jupyterlab
+  - hvplot
+  - jupyter_bokeh
+  - matplotlib
+  - geoviews
+  - cartopy
+  - bokeh
   - dask
   - odc-stac
   - planetary-computer
@@ -15,16 +22,37 @@ dependencies:
   - xarray
   - netcdf4
   - rioxarray
+  - opencv
+  - folium
   - distributed
+  - zarr
   - tqdm
+  - nb_conda_kernels
+  - black
+  - flake8
+  - earthaccess
   - hydroerr
+  - nodejs
   - earthengine-api
   - earthaccess
   - pytest
   - conda-build
   - coverage
   - lxml
+  - geemap
   - tensorflow
+  - altair
+  - ca-certificates
+  - certifi
+  - openssl
+  - scikit-learn
+  - selenium
+  - firefox
+  - geckodriver
+  - sentinelsat
+  - netcdf4
   - packaging
-  - pip:
-    - podaac-data-subscriber
+  - vegafusion-python-embed
+  - vl-convert-python
+  - papermill
+  - jupyter
